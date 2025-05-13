@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TOS Summary MVP</title>
+</head>
+<body style="font-family: sans-serif; padding: 20px;">
+  <h1>TOS/Privacy Policy Summary Tool (Demo)</h1>
+
+  <label>Enter a URL:</label><br>
+  <input type="text" placeholder="https://example.com" style="width: 300px; padding: 8px;" />
+  <button onclick="generateSummary()" style="margin-left: 10px; padding: 8px;">Generate Summary</button>
+
+  <h2>Summary Output</h2>
+  <p><strong>One-Sentence Summary:</strong> This policy outlines data sharing and user tracking.</p>
+  <p><strong>100-word Summary:</strong> This document describes how user information is collected, stored, and shared with third parties...</p>
+
+  <h2>Top Word Frequencies</h2>
+  <ul>
+    <li>data – 42 times</li>
+    <li>user – 37 times</li>
+    <li>information – 35 times</li>
+    <li>share – 18 times</li>
+  </ul>
+
+  <script>
+    function generateSummary() {
+      alert("Demo summary generated!");
+    }
+  </script>
+</body>
+</html>
