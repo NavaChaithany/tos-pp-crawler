@@ -4,29 +4,87 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TOS Summary MVP</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .hidden { display: none; }
+    .container { max-width: 700px; margin: auto; }
+    input, select, button { margin-top: 10px; padding: 8px; width: 100%; }
+    ul { margin-top: 10px; }
+  </style>
 </head>
-<body style="font-family: sans-serif; padding: 20px;">
-  <h1>TOS/Privacy Policy Summary Tool (Demo)</h1>
+<body>
+  <div class="container">
+    <div id="loginDiv">
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Username"><br>
+      <input type="password" id="password" placeholder="Password"><br>
+      <button onclick="login()">Login</button>
+    </div>
 
-  <label>Enter a URL:</label><br>
-  <input type="text" placeholder="https://example.com" style="width: 300px; padding: 8px;" />
-  <button onclick="generateSummary()" style="margin-left: 10px; padding: 8px;">Generate Summary</button>
+    <div id="mainApp" class="hidden">
+      <h1>TOS/Privacy Policy Summary Tool (Demo)</h1>
 
-  <h2>Summary Output</h2>
-  <p><strong>One-Sentence Summary:</strong> This policy outlines data sharing and user tracking.</p>
-  <p><strong>100-word Summary:</strong> This document describes how user information is collected, stored, and shared with third parties...</p>
+      <label>Enter a URL:</label><br>
+      <input type="text" id="urlInput" placeholder="https://example.com" />
 
-  <h2>Top Word Frequencies</h2>
-  <ul>
-    <li>data – 42 times</li>
-    <li>user – 37 times</li>
-    <li>information – 35 times</li>
-    <li>share – 18 times</li>
-  </ul>
+      <label>Select Source Type:</label><br>
+      <select id="sourceType">
+        <option>Website (.com, .org, .edu)</option>
+        <option>Android App Store</option>
+        <option>iOS App Store</option>
+      </select>
+
+      <button onclick="generateSummary()">Generate Summary</button>
+      <button onclick="downloadReport()">Download Report</button>
+
+      <h2>Summary Output</h2>
+      <p><strong>One-Sentence Summary:</strong> This policy outlines data sharing and user tracking.</p>
+      <p><strong>100-word Summary:</strong> This document describes how user information is collected, stored, and shared with third parties...</p>
+
+      <h2>Top Word Frequencies</h2>
+      <ul>
+        <li>data – 42 times</li>
+        <li>user – 37 times</li>
+        <li>information – 35 times</li>
+        <li>share – 18 times</li>
+      </ul>
+
+      <h2>Previously Analyzed URLs</h2>
+      <ul>
+        <li>https://amazon.com</li>
+        <li>https://healthline.com</li>
+        <li>https://play.google.com/store/apps/details?id=com.example.app</li>
+      </ul>
+    </div>
+  </div>
 
   <script>
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      if (user && pass) {
+        document.getElementById("loginDiv").style.display = "none";
+        document.getElementById("mainApp").classList.remove("hidden");
+      } else {
+        alert("Please enter both username and password.");
+      }
+    }
+
     function generateSummary() {
-      alert("Demo summary generated!");
+      const url = document.getElementById("urlInput").value;
+      if (url.trim() === "") {
+        alert("Please enter a valid URL.");
+        return;
+      }
+      alert("Demo summary generated for: " + url);
+    }
+
+    function downloadReport() {
+      const blob = new Blob(["Demo Summary Report\\n\\n- One-sentence summary...\\n- 100-word summary..."], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "TOS_Summary_Report.txt";
+      link.click();
     }
   </script>
 </body>
