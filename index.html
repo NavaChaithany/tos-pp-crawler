@@ -3,88 +3,155 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TOS Summary MVP</title>
+  <title>TOS Summary Tool</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; }
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f2f2f2; }
+    .nav { display: flex; background: #007BFF; padding: 10px; }
+    .nav button { flex: 1; background: none; border: none; color: white; padding: 10px; cursor: pointer; font-size: 16px; }
+    .nav button:hover, .nav button.active { background: #0056b3; }
+    .container { max-width: 900px; margin: auto; padding: 20px; background: white; min-height: 600px; }
     .hidden { display: none; }
-    .container { max-width: 700px; margin: auto; }
-    input, select, button { margin-top: 10px; padding: 8px; width: 100%; }
-    ul { margin-top: 10px; }
+    .section h2 { margin-top: 0; }
+    input, select, button, textarea { width: 100%; margin: 10px 0; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+    button.action { background-color: #007BFF; color: white; border: none; }
+    ul { padding-left: 20px; }
+    .card { display: inline-block; width: 200px; background: #eee; margin: 10px; padding: 15px; border-radius: 8px; text-align: center; }
+    .auth-container { max-width: 400px; margin: 80px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .link { color: #007BFF; cursor: pointer; font-size: 0.9em; text-align: right; display: block; margin-top: -5px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div id="loginDiv">
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Username"><br>
-      <input type="password" id="password" placeholder="Password"><br>
-      <button onclick="login()">Login</button>
+
+  <!-- Login / Register / Forgot -->
+  <div id="authPage" class="auth-container">
+    <h2>Login</h2>
+    <input type="text" id="loginUser" placeholder="Username or Email">
+    <input type="password" id="loginPass" placeholder="Password">
+    <span class="link" onclick="showForgot()">Forgot Password?</span>
+    <span class="link" onclick="showRegister()">Don’t have an account? Register</span>
+    <button onclick="login()">Login</button>
+
+    <div id="registerForm" class="hidden">
+      <h2>Register</h2>
+      <input type="text" placeholder="Full Name">
+      <input type="email" placeholder="Email Address">
+      <input type="password" placeholder="Password">
+      <input type="password" placeholder="Confirm Password">
+      <span class="link" onclick="showLogin()">Already have an account? Login</span>
+      <button onclick="alert('Registered successfully (demo)!'); showLogin();">Register</button>
     </div>
 
-    <div id="mainApp" class="hidden">
-      <h1>TOS/Privacy Policy Summary Tool (Demo)</h1>
+    <div id="forgotForm" class="hidden">
+      <h2>Reset Password</h2>
+      <input type="email" placeholder="Enter your registered email">
+      <span class="link" onclick="showLogin()">Back to Login</span>
+      <button onclick="alert('Password reset link sent (demo).'); showLogin();">Send Reset Link</button>
+    </div>
+  </div>
 
-      <label>Enter a URL:</label><br>
-      <input type="text" id="urlInput" placeholder="https://example.com" />
+  <!-- Main App -->
+  <div id="mainApp" class="hidden">
+    <div class="nav">
+      <button class="active" onclick="showSection('dashboard')">Dashboard</button>
+      <button onclick="showSection('analyze')">Analyze</button>
+      <button onclick="showSection('reports')">Saved Reports</button>
+      <button onclick="showSection('settings')">Settings</button>
+      <button onclick="showSection('contact')">Contact</button>
+    </div>
 
-      <label>Select Source Type:</label><br>
-      <select id="sourceType">
-        <option>Website (.com, .org, .edu)</option>
-        <option>Android App Store</option>
-        <option>iOS App Store</option>
-      </select>
+    <div class="container">
+      <!-- Dashboard -->
+      <div id="dashboard" class="section">
+        <h2>Dashboard</h2>
+        <div class="card">🔍 URLs Analyzed<br><strong>12,452</strong></div>
+        <div class="card">📄 Avg. Words<br><strong>1,021</strong></div>
+        <div class="card">🧠 Sentiment Alerts<br><strong>328</strong></div>
+        <div class="card">📁 Saved Reports<br><strong>96</strong></div>
+      </div>
 
-      <button onclick="generateSummary()">Generate Summary</button>
-      <button onclick="downloadReport()">Download Report</button>
+      <!-- Analyze -->
+      <div id="analyze" class="section hidden">
+        <h2>Analyze New Document</h2>
+        <input type="text" placeholder="Enter URL for analysis" />
+        <select>
+          <option>Website (.com, .org, .edu)</option>
+          <option>Android App</option>
+          <option>iOS App</option>
+        </select>
+        <button class="action" onclick="alert('Analysis complete (demo).')">Analyze</button>
+        <button onclick="alert('Report downloaded!')">Download Report</button>
 
-      <h2>Summary Output</h2>
-      <p><strong>One-Sentence Summary:</strong> This policy outlines data sharing and user tracking.</p>
-      <p><strong>100-word Summary:</strong> This document describes how user information is collected, stored, and shared with third parties...</p>
+        <h3>AI Summary Output</h3>
+        <p><strong>One-Sentence:</strong> This policy outlines data collection and third-party sharing practices.</p>
+        <p><strong>100-word:</strong> This document explains how data is collected, used, and stored by the company, and under what conditions it is shared with partners, vendors, and other external services...</p>
+      </div>
 
-      <h2>Top Word Frequencies</h2>
-      <ul>
-        <li>data – 42 times</li>
-        <li>user – 37 times</li>
-        <li>information – 35 times</li>
-        <li>share – 18 times</li>
-      </ul>
+      <!-- Reports -->
+      <div id="reports" class="section hidden">
+        <h2>Saved Reports</h2>
+        <ul>
+          <li><a href="#">tos_amazon_com.txt</a></li>
+          <li><a href="#">pp_healthline_org.txt</a></li>
+          <li><a href="#">tos_playstore_app_xyz.txt</a></li>
+        </ul>
+      </div>
 
-      <h2>Previously Analyzed URLs</h2>
-      <ul>
-        <li>https://amazon.com</li>
-        <li>https://healthline.com</li>
-        <li>https://play.google.com/store/apps/details?id=com.example.app</li>
-      </ul>
+      <!-- Settings -->
+      <div id="settings" class="section hidden">
+        <h2>Settings</h2>
+        <label><input type="checkbox" onclick="toggleDarkMode()"> Enable Dark Mode</label>
+        <label><input type="checkbox"> Auto-save reports</label>
+        <label><input type="checkbox"> Email summary copy</label>
+      </div>
+
+      <!-- Contact -->
+      <div id="contact" class="section hidden">
+        <h2>Contact & Support</h2>
+        <textarea placeholder="Write your message here..." rows="5"></textarea>
+        <button class="action" onclick="alert('Message sent!')">Send</button>
+      </div>
     </div>
   </div>
 
   <script>
+    const sections = ['dashboard', 'analyze', 'reports', 'settings', 'contact'];
+    function showSection(id) {
+      sections.forEach(s => document.getElementById(s).classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      document.querySelectorAll('.nav button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function toggleDarkMode() {
+      const bg = document.body.style.backgroundColor;
+      document.body.style.backgroundColor = (bg === 'rgb(34, 34, 34)') ? '#f2f2f2' : '#222';
+      document.body.style.color = (bg === 'rgb(34, 34, 34)') ? '#000' : '#fff';
+    }
+
     function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
+      const user = document.getElementById("loginUser").value;
+      const pass = document.getElementById("loginPass").value;
       if (user && pass) {
-        document.getElementById("loginDiv").style.display = "none";
+        document.getElementById("authPage").style.display = "none";
         document.getElementById("mainApp").classList.remove("hidden");
       } else {
         alert("Please enter both username and password.");
       }
     }
 
-    function generateSummary() {
-      const url = document.getElementById("urlInput").value;
-      if (url.trim() === "") {
-        alert("Please enter a valid URL.");
-        return;
-      }
-      alert("Demo summary generated for: " + url);
+    function showLogin() {
+      document.getElementById("registerForm").classList.add("hidden");
+      document.getElementById("forgotForm").classList.add("hidden");
     }
 
-    function downloadReport() {
-      const blob = new Blob(["Demo Summary Report\\n\\n- One-sentence summary...\\n- 100-word summary..."], { type: "text/plain;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "TOS_Summary_Report.txt";
-      link.click();
+    function showRegister() {
+      document.getElementById("registerForm").classList.remove("hidden");
+      document.getElementById("forgotForm").classList.add("hidden");
+    }
+
+    function showForgot() {
+      document.getElementById("registerForm").classList.add("hidden");
+      document.getElementById("forgotForm").classList.remove("hidden");
     }
   </script>
 </body>
